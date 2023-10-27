@@ -8,8 +8,11 @@ const ctx = canv.getContext('2d');
 let imageData = ctx.createImageData(width, height);
 
 brezenhamLine(imageData, 100, 700, 700, 700);
-bezier(imageData, 100, 700, 400, -100, 700, 700);
-bezier(imageData, 400, 700, 500, 300, 600, 700);
+bezier3(imageData, 100, 700, 400, -100, 700, 700);
+bezier3(imageData, 400, 700, 500, 300, 600, 700);
+bezier4(imageData, 260, 540, 300, 620, 260, 685, 300, 540);
+bezier4(imageData, 250, 530, 300, 620, 260, 685, 310, 530);
+bezier4(imageData, 270, 530, 300, 620, 260, 685, 300, 530);
 brezenhamCircle(imageData, 550, 600, 10);
 brezenhamCircle(imageData, 300, 550, 80);
 brezenhamLine(imageData, 300, 470, 300, 630);
@@ -134,11 +137,20 @@ function brezenhamCircle(imageData, x0, y0, r) {
     }
 }
 
-function bezier(imageData, x0, y0, x1, y1, x2, y2) {
+function bezier3(imageData, x0, y0, x1, y1, x2, y2) {
     let x, y;
     for (let t = 0; t <= 1; t = t + 0.0001) {
-        x = Math.pow((1 - t), 2) * x0 + 2 * (1 - t) * t * x1 + Math.pow(t, 2) * x2;
-        y = Math.pow((1 - t), 2) * y0 + 2 * (1 - t) * t * y1 + Math.pow(t, 2) * y2;
+        x = (1 - t)**2 * x0 + 2 * (1 - t) * t * x1 + t**2 * x2;
+        y = (1 - t)**2 * y0 + 2 * (1 - t) * t * y1 + t**2 * y2;
+        setPoint(imageData, Math.round(x), Math.round(y));
+    }
+}
+
+function bezier4(imageData, x0, y0, x1, y1, x2, y2, x3, y3) {
+    let x, y;
+    for (let t = 0; t < 1; t += 0.0001) {
+        x = (1-t)**3*x0 + 3*t*(1-t)**2*x1 + 3*t**2*(1-t)*x2 + t**3*x3;
+        y = (1-t)**3*y0 + 3*t*(1-t)**2*y1 + 3*t**2*(1-t)*y2 + t**3*y3;
         setPoint(imageData, Math.round(x), Math.round(y));
     }
 }
